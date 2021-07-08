@@ -1,3 +1,4 @@
+//Import all nedded modules
 const express = require('express')
 const expressGraphQL = require('express-graphql').graphqlHTTP
 const cors = require('cors')
@@ -9,11 +10,17 @@ const {
 	GraphQLInt,
 	GraphQLNonNull
 } = require('graphql')
+
+/**
+ * Contains the application from express library
+ */
 const app = express()
+
+//Use CORS to get rid off Allow-Cross-Origin
 app.use(cors())
 
 /**
- * This is placeholder data
+ * This is placeholder data. Acts as a DB
  */
 const authors = [
 	{ id: 1, name: 'J. K. Rowling' },
@@ -22,7 +29,7 @@ const authors = [
 ]
 
 /**
- * This is placeholder data
+ * This is placeholder data. Acts as a DB
  */
 const books = [
 	{ id: 1, name: 'Harry Potter and the Chamber of Secrets', authorId: 1 },
@@ -35,21 +42,10 @@ const books = [
 	{ id: 8, name: 'Beyond the Shadows', authorId: 3 }
 ]
 
-/**
- * Adds a test
- * @param {string} test this is a test 
- * @param {number} id 
- * @returns {Object} the test object
- */
-function addTest(test, id){
-	return {
-		test, 
-		id
-	}
-}
 
 /**
  * BookType for book list
+ * @type {GraphQLObjectType}
  */
 const BookType = new GraphQLObjectType({
 	name: 'Book',
@@ -68,6 +64,9 @@ const BookType = new GraphQLObjectType({
 	})
 })
 
+/**
+ * AuthorType for author list
+ */
 const AuthorType = new GraphQLObjectType({
 	name: "author",
 	description: 'A list of authors',
@@ -83,8 +82,9 @@ const AuthorType = new GraphQLObjectType({
 	})
 })
 
-
-
+/**
+ * The main queries for graphql
+ */
 const RootQueryType = new GraphQLObjectType({
 	name: 'Query',
 	description: 'Root Query',
@@ -118,6 +118,9 @@ const RootQueryType = new GraphQLObjectType({
 	})
 })
 
+/**
+ * The main mutation for graphql
+ */
 const RootMutationType = new GraphQLObjectType({
 	name: 'Mutation',
 	description: 'Root mutation',
@@ -170,13 +173,22 @@ const RootMutationType = new GraphQLObjectType({
 	})
 })
 
+/**
+ * Applying queries and mutations to schema
+ */
+
 const schema = new GraphQLSchema({
 	query: RootQueryType,
 	mutation: RootMutationType
 })
 
+/**
+ * Apply graphql to 'graphql route
+ */
 app.use('/graphql', expressGraphQL({
 	schema: schema,
 	graphiql: true
 }))
+
+//Start the server on port 5000
 app.listen(5000, () => console.log('Server Running on port 5000'))
