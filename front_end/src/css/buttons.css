@@ -1,0 +1,15 @@
+.btn {
+	padding: 5px 25px;
+	border: none;
+	font-size: 20px;
+	cursor: pointer;
+	width: 100%;
+
+}
+
+.btn--primary {
+	background-color: red;
+	border-radius: 2px;
+	text-align: center;
+}
+

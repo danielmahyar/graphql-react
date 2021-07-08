@@ -1,5 +1,6 @@
 const express = require('express')
 const expressGraphQL = require('express-graphql').graphqlHTTP
+const cors = require('cors')
 const {
 	GraphQLSchema,
 	GraphQLObjectType,
@@ -9,14 +10,20 @@ const {
 	GraphQLNonNull
 } = require('graphql')
 const app = express()
+app.use(cors())
 
-
+/**
+ * This is placeholder data
+ */
 const authors = [
 	{ id: 1, name: 'J. K. Rowling' },
 	{ id: 2, name: 'J. R. R. Tolkien' },
 	{ id: 3, name: 'Brent Weeks' }
 ]
 
+/**
+ * This is placeholder data
+ */
 const books = [
 	{ id: 1, name: 'Harry Potter and the Chamber of Secrets', authorId: 1 },
 	{ id: 2, name: 'Harry Potter and the Prisoner of Azkaban', authorId: 1 },
@@ -28,7 +35,22 @@ const books = [
 	{ id: 8, name: 'Beyond the Shadows', authorId: 3 }
 ]
 
+/**
+ * Adds a test
+ * @param {string} test this is a test 
+ * @param {number} id 
+ * @returns {Object} the test object
+ */
+function addTest(test, id){
+	return {
+		test, 
+		id
+	}
+}
 
+/**
+ * BookType for book list
+ */
 const BookType = new GraphQLObjectType({
 	name: 'Book',
 	description: 'This represents a book written by an author',
@@ -60,6 +82,7 @@ const AuthorType = new GraphQLObjectType({
 		}
 	})
 })
+
 
 
 const RootQueryType = new GraphQLObjectType({
