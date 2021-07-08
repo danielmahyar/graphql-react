@@ -53,7 +53,11 @@ function App() {
    * @returns {Object} - of books
    */
     useEffect(() => {
-      console.log(data)
+      //Error handler: If data is empty (usually first req)
+      if(!data) return null
+      console.log({...data})
+      //Set book state to data recieved from 
+      setBooks({...data}.books)
     }, [data])
 
 
