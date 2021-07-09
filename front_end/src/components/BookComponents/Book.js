@@ -9,17 +9,16 @@ import { BookContext } from '../App'
 */
 
 
-const Book = (bookInformation) => {
+const Book = (props) => {
 
 	/** 
 	 * Deconstructing book information
 	 * @type {bookInformation} 
 	*/
 	const {
-		id,
-		name,
-		authorId
-	} = bookInformation
+		book,
+		author
+	} = props
 
 	/**
 	 * Import the UI remove function from App.js
@@ -30,14 +29,14 @@ const Book = (bookInformation) => {
 
 	return (
 		<tr>
-			<td className="book-list__th">{id}</td>
-			<td className="book-list__th">{name}</td>
-			<td className="book-list__th">{authorId}</td>
+			<td className="book-list__th">{book.displayId}</td>
+			<td className="book-list__th">{book.name}</td>
+			<td className="book-list__th">{author.name}</td>
 			<td className="book-list__th">
 				{/* Input detection */}
 				<button
 					className="btn btn--primary"
-					onClick={() => handleBookRemove(id)}
+					onClick={() => handleBookRemove(book.id)}
 				>
 				 	Delete
 				</button>

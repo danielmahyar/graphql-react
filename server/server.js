@@ -190,5 +190,15 @@ app.use('/graphql', expressGraphQL({
 	graphiql: true
 }))
 
-//Start the server on port 5000
+/**
+ * ONLY UNCOMMENT THIS PART IN PRODUCTION
+ * 
+ * Takes the build from react and serves it on server
+ */
+// app.use(express.static('../front_end/build'))
+
+
+/**
+ * Start the server on port 5000
+ */
 app.listen(5000, () => console.log('Server Running on port 5000'))

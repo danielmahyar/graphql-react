@@ -15,7 +15,7 @@ import { onError } from '@apollo/client/link/error'
 const errorLink = onError(({ graphqlErrors, networkError}) => {
   if(graphqlErrors) {
     graphqlErrors.map(({message, location, path}) => {
-      return alert(`Graphql error ${message}`)
+      return console.log(message)
     })
   }
 })
@@ -27,7 +27,7 @@ const link = from([
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: "http://localhost:5000/graphql"
+  link
 })
 
 

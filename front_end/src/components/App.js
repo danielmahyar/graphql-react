@@ -46,6 +46,11 @@ function App() {
    */
   const [books, setBooks] = useState(sampleBooks)
 
+  /**
+   * Authors state that dynamically populates UI
+   */
+  const [authors, setAuthors] = useState(sampleBooks)
+
   const {error, loading, data} = useQuery(GET_BOOKS)
 
   /**
@@ -56,39 +61,40 @@ function App() {
       //Error handler: If data is empty (usually first req)
       if(!data) return null
       console.log({...data})
-      //Set book state to data recieved from 
+      //Set books state to data recieved from DB
       setBooks({...data}.books)
+
+      //Set authors state to data recieved from DB
+      setAuthors({...data}.authors)
     }, [data])
 
 
-
-
   /**
-   * Context values that contains functions
-   * updating the UI
-   * @type {Object}
-   */
-  const BookContextUIFunctions = {
-    handleBookRemove
-  }
-
-  /**
-   * Function that handles book removes.
-   * Mostly for UI purposes
-   * @param {number} id - The ID of the book that shall be removed
-   * @returns {Object} Updates 'books' state 
-   */
-  function handleBookRemove(id){
-    //Add DELETE func for GRAPHQL
-
-    //For the UI filter the the books state array
-    const filteredBooksArray = books.filter(book => book.id !== id)
-    
-    //Set book state to new filtered array
-    setBooks(filteredBooksArray)
-  }
+     * Context values that contains functions
+     * updating the UI
+     * @type {Object}
+     */
+    const BookContextUIFunctions = {
+      handleBookRemove
+    }
 
     /**
+     * Function that handles book removes.
+     * Mostly for UI purposes
+     * @param {number} id - The ID of the book that shall be removed
+     * @returns {Object} Updates 'books' state 
+     */
+    function handleBookRemove(id){
+      //Add DELETE func for GRAPHQL
+
+      //For the UI filter the the books state array
+      const filteredBooksArray = books.filter(book => book.id !== id)
+      
+      //Set book state to new filtered array
+      setBooks(filteredBooksArray)
+    }
+
+  /**
    * Function that handles button removes.
    * Mostly for UI purposes
    * @param {number} id - The ID of the book that shall be removed
@@ -122,7 +128,6 @@ function App() {
       */}
       <h1 className="app__h1">Book listings</h1>
 
-      {loading ? <IsLoading /> : null}
 
       <BookContext.Provider
           value={BookContextUIFunctions}
@@ -134,6 +139,7 @@ function App() {
         */}
         <BookList 
           books={books}
+          authors={authors}
         />
 
         <button
@@ -148,10 +154,5 @@ function App() {
   )
 }
 
-function IsLoading(){
-  return (
-    <h2 className="app__h1">Loading books from database</h2>
-  )
-}
 
 export default App;
