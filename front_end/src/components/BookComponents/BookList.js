@@ -2,7 +2,7 @@ import React from 'react';
 
 import Book from './Book'
 
-const BookList = ({ books, authors }) => {
+const BookList = ({ books }) => {
 
 	//JSX return
 	return (
@@ -21,9 +21,6 @@ const BookList = ({ books, authors }) => {
 					//Index incremented to display order
 					const displayId = index + 1
 
-					//Find the author of the book
-					const author = authors.find(author => book.authorId === author.id)
-
 					//Assign index as display ID for react app
 					const bookInfo = { ...book, displayId }
 					//Return the book and author to Book component
@@ -31,7 +28,6 @@ const BookList = ({ books, authors }) => {
 						<Book 
 							book={bookInfo}
 							key={book.id}
-							author={author}
 						/>
 					);
 				})}
