@@ -25,9 +25,12 @@ import BookList from './BookComponents/BookList'
  */
 const sampleBooks = [
   {
-    id: 1,
+    _id: 1,
     name: "Placeholder text",
-    authorId: 1
+    author: { 
+      _id: 1,
+      name: "Daniel Cargar Mahyar"
+    }
   }
 ]
 
@@ -46,11 +49,6 @@ function App() {
    */
   const [books, setBooks] = useState(sampleBooks)
 
-  /**
-   * Authors state that dynamically populates UI
-   */
-  const [authors, setAuthors] = useState(sampleBooks)
-
   const {error, loading, data} = useQuery(GET_BOOKS)
 
   /**
@@ -60,12 +58,10 @@ function App() {
     useEffect(() => {
       //Error handler: If data is empty (usually first req)
       if(!data) return null
-      console.log({...data})
+
       //Set books state to data recieved from DB
       setBooks({...data}.books)
 
-      //Set authors state to data recieved from DB
-      setAuthors({...data}.authors)
     }, [data])
 
 
@@ -139,7 +135,6 @@ function App() {
         */}
         <BookList 
           books={books}
-          authors={authors}
         />
 
         <button

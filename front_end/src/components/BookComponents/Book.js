@@ -16,9 +16,10 @@ const Book = (props) => {
 	 * @type {bookInformation} 
 	*/
 	const {
-		book,
-		author
+		book
 	} = props
+
+	console.log(book)
 
 	/**
 	 * Import the UI remove function from App.js
@@ -31,7 +32,7 @@ const Book = (props) => {
 		<tr>
 			<td className="book-list__th">{book.displayId}</td>
 			<td className="book-list__th">{book.name}</td>
-			<td className="book-list__th">{author.name}</td>
+			<td className="book-list__th">{book.author.name}</td>
 			<td className="book-list__th">
 				{/* Input detection */}
 				<button

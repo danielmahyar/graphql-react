@@ -3,13 +3,12 @@ import { gql } from '@apollo/client'
 export const GET_BOOKS = gql`
 	query{
 		books{
-			id,
+			_id,
 			name,
-			authorId
-		},
-		authors{
-			id,
-			name
+			author{
+				_id,
+				name
+			}
 		}
 	}
 
