@@ -7,32 +7,19 @@
 
 //React imports
 import React, { useState, useEffect } from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 
 //Queries import
-import { GET_BOOKS } from '../GraphQL/Queries'
+import { GET_ALL_BOOKS_AND_AUTHORS } from '../GraphQL/Queries'
+import { DELETE_BOOK, ADD_BOOK } from '../GraphQL/Mutations'
+
 
 //import main css file
 import '../css/app.css'
 
 //All book list components
-import BookList from './BookComponents/BookList'
-
-
-/**
- * Books array 
- * @type {Array<Object>}
- */
-const sampleBooks = [
-  {
-    _id: 1,
-    name: "Placeholder text",
-    author: { 
-      _id: 1,
-      name: "Daniel Cargar Mahyar"
-    }
-  }
-]
+import BookMain from './BookComponents/BookMain'
+import AuthorMain from './AuthorComponents/AuthorMain'
 
 export const BookContext = React.createContext()
 
@@ -47,9 +34,21 @@ function App() {
    * books state that dynamically updates UI
    * @returns {Array<Object>}
    */
-  const [books, setBooks] = useState(sampleBooks)
+  const [books, setBooks] = useState([])
+  const [authors, setAuthors] = useState([])
 
-  const {error, loading, data} = useQuery(GET_BOOKS)
+  const { loading, error, data, refetch } = useQuery(GET_ALL_BOOKS_AND_AUTHORS)
+
+  const [deleteBook] = useMutation(DELETE_BOOK, {
+    refetchQueries: [{
+      query: GET_ALL_BOOKS_AND_AUTHORS
+    }]
+  })
+  const [addBook] = useMutation(ADD_BOOK, {
+    refetchQueries: [{
+      query: GET_ALL_BOOKS_AND_AUTHORS
+    }]
+  })
 
   /**
    * Effect for rendering App.js first time
@@ -61,6 +60,7 @@ function App() {
 
       //Set books state to data recieved from DB
       setBooks({...data}.books)
+      setAuthors({...data}.authors)
 
     }, [data])
 
@@ -71,7 +71,10 @@ function App() {
      * @type {Object}
      */
     const BookContextUIFunctions = {
-      handleBookRemove
+      handleBookRemove,
+      handleBookAdd,
+      books,
+      authors
     }
 
     /**
@@ -80,11 +83,16 @@ function App() {
      * @param {number} id - The ID of the book that shall be removed
      * @returns {Object} Updates 'books' state 
      */
-    function handleBookRemove(id){
+    function handleBookRemove(bookId){
+
+      console.log(bookId)
       //Add DELETE func for GRAPHQL
+      deleteBook({ variables: { bookId }})
+
+      refetch()
 
       //For the UI filter the the books state array
-      const filteredBooksArray = books.filter(book => book.id !== id)
+      const filteredBooksArray = books.filter(book => book.id !== bookId)
       
       //Set book state to new filtered array
       setBooks(filteredBooksArray)
@@ -96,53 +104,53 @@ function App() {
    * @param {number} id - The ID of the book that shall be removed
    * @returns {Object} Updates 'books' state 
    */
-     function handleBookAdd(){
+    function handleBookAdd({ name, authorId }){
+
       //Add ADD func for GRAPHQL
-  
-      //Make temporary book object
-      const newBookTemp = {
-        id: books.length + 1,
-        name: '',
-        authorId: 1 
-      }
+      addBook({ variables: { name, authorId }})
 
-      //Get array dublicate
-      const booksDublicate = [...books]
-
-      //Add new Book to the array
-      booksDublicate.push(newBookTemp)
-
-      //Update books state with new array
-      setBooks(booksDublicate)
+      refetch()
     }
 
   return (
     <>
+      {/* Show if error from apollo is present */}
+      {loading &&
+        <div className="app__loading">
+          <h2 className="app__error-message">Loading books</h2>
+        </div>
+      }
+
+      {/* Show if error from apollo is present */}
+      {error &&
+        <div className="app__error">
+          <h2 className="app__error-message">An error occurred: {error.message}</h2>
+        </div>
+      }
+
       {/* 
         The main header. To add an header
         then add html elements above this comment
       */}
       <h1 className="app__h1">Book listings</h1>
 
-
       <BookContext.Provider
           value={BookContextUIFunctions}
       >
-        
         {/* 
-          Renders all books by passing
-          books from from App.js as prop to BookList
+          Renders main booking list if loading and error are falsey
         */}
-        <BookList 
-          books={books}
-        />
+        {(!loading && !error) && 
+          <>
+            {/* 
+              Renders all books by passing
+              books from from App.js as prop to BookList
+            */}
+            <BookMain />
 
-        <button
-          className="btn"
-          onClick={() => handleBookAdd()}
-        >
-          Add Book
-        </button>
+            <AuthorMain />
+          </>
+        }
 
       </BookContext.Provider>
     </>

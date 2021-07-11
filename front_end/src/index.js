@@ -12,7 +12,7 @@ import {
 import { onError } from '@apollo/client/link/error'
 
 
-const errorLink = onError(({ graphqlErrors, networkError}) => {
+const errorLink = onError(({ graphqlErrors, networkError }) => {
   if(graphqlErrors) {
     graphqlErrors.map(({message, location, path}) => {
       return console.log(message)
@@ -22,7 +22,7 @@ const errorLink = onError(({ graphqlErrors, networkError}) => {
 
 const link = from([
   errorLink,
-  new HttpLink({uri: "http://localhost:5000/graphql"})
+  new HttpLink({uri: "http://192.168.0.109:5000/graphql"})
 ]) 
 
 const client = new ApolloClient({

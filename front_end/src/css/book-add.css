@@ -1,0 +1,12 @@
+.book-add__input {
+	border: 1px solid black;
+	border-radius: 5px;
+	font-size: inherit;
+	padding: 5px 10px;
+	outline: none;
+	width: 100%;
+}
+
+.book-add__btn {
+	margin-top: 10px;
+}

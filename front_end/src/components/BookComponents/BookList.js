@@ -1,8 +1,9 @@
-import React from 'react';
-
+import React, { useContext } from 'react';
+import { BookContext } from '../App'
 import Book from './Book'
 
-const BookList = ({ books }) => {
+const BookList = () => {
+	const { books } = useContext(BookContext)
 
 	//JSX return
 	return (
@@ -27,7 +28,7 @@ const BookList = ({ books }) => {
 					return (
 						<Book 
 							book={bookInfo}
-							key={book.id}
+							key={book._id}
 						/>
 					);
 				})}

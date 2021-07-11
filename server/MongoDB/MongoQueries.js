@@ -1,3 +1,10 @@
+/**
+ * Import needed models for DB queries
+ */
+
+/**
+ * Book 
+ */
 const Book = require('./models/Book')
 const Author = require('./models/Author')
 

@@ -1,6 +1,8 @@
 @import-normalize;
 @import 'buttons.css';
 @import 'book-list.css';
+@import 'book-main.css';
+@import 'book-add.css';
 
 *, *::before, *::after {
 	font-family: Gotham Rounded, sans-serif;
@@ -16,4 +18,29 @@ body{
 
 .app__h1{
 	text-align: center;
+}
+
+.app__error{
+	width: 100%;
+	background-color: red;
+	height: 100px;
+	display: grid;
+	place-items: center;
+}
+
+.app__loading{
+	width: 100%;
+	background-color: orange;
+	height: 100px;
+	display: grid;
+	place-items: center;
+}
+
+.app__error-message{
+	margin: 0;
+}
+
+.section-divider{
+	border-bottom: 1px solid black;
+	margin-top: 15px;
 }

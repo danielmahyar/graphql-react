@@ -3,7 +3,7 @@ import { BookContext } from '../App'
 
 /**
 	 * @typedef {object} bookInformation
-	 * @property {number} id - book id
+	 * @property {number} _id - book id
 	 * @property {string} name - book name
 	 * @property {number} authorId - book author id
 */
@@ -19,7 +19,6 @@ const Book = (props) => {
 		book
 	} = props
 
-	console.log(book)
 
 	/**
 	 * Import the UI remove function from App.js
@@ -37,7 +36,7 @@ const Book = (props) => {
 				{/* Input detection */}
 				<button
 					className="btn btn--primary"
-					onClick={() => handleBookRemove(book.id)}
+					onClick={() => handleBookRemove(book._id)}
 				>
 				 	Delete
 				</button>
