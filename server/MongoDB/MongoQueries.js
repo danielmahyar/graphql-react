@@ -5,6 +5,7 @@
 /**
  * Book 
  */
+const mongoose = require('mongoose')
 const Book = require('./models/Book')
 const Author = require('./models/Author')
 
@@ -60,12 +61,27 @@ const saveBook = async(name, authorId) => {
 	}
 }
 
+const deleteBook = async(id) => {
+	const _id = mongoose.mongo.ObjectId(id)
+	await Book.findByIdAndDelete(_id)
+	return id
+}
+
+const deleteAuthor = async(id) => {
+	const _id = mongoose.mongo.ObjectId(id)
+	await Author.findByIdAndDelete(_id)
+	console.log(_id)
+	return id
+}
+
 
 const functionsExports = {
 	getAuthors,
 	saveAuthor,
 	getBooks,
-	saveBook
+	saveBook,
+	deleteBook,
+	deleteAuthor
 }
 
 module.exports = functionsExports

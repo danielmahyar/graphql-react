@@ -15,7 +15,9 @@ const {
 	getAuthors,
 	saveAuthor,
 	getBooks,
-	saveBook
+	saveBook,
+	deleteBook,
+	deleteAuthor
 } = require('../MongoDB/MongoQueries')
 
 
@@ -97,7 +99,8 @@ const BookType = new GraphQLObjectType({
 			resolve: (book) => {
 				return authors.then(authorsFetched => {
 					let author = authorsFetched.find(author => author._id.toString() === book.authorId)
-					return { ...author._doc, _id: author._id.toString() }
+					if(!author) return ({ _id: "null", name: "null"})
+					else return { ...author._doc, _id: author._id.toString() }
 				})
 
 			}
@@ -156,7 +159,8 @@ const RootQueryType = new GraphQLObjectType({
 			type: new GraphQLList(BookType),
 			description: 'List of books',
 			resolve: () => {
-				return getBooks().then(books => books)
+				updateBooks()
+				return books.then(books => books)
 			}
 		},
 		author: {
@@ -175,7 +179,10 @@ const RootQueryType = new GraphQLObjectType({
 		authors: {
 			type: new GraphQLList(AuthorType),
 			description: 'List of authors',
-			resolve: () => getAuthors().then(authors => authors)
+			resolve: () => {
+				updateAuthors()
+				return authors.then(authors => authors)
+			}
 		}
 	})
 })
@@ -198,7 +205,7 @@ const RootMutationType = new GraphQLObjectType({
 				return saveBook(args.name, args.authorId)
 				.then(newBook => {
 					updateBooks()
-					return { ...newBook._doc, _id: newBook._id.toString()}
+					return { ...newBook._doc, _id: newBook._id.toString() }
 				})
 			}
 		},
@@ -226,6 +233,32 @@ const RootMutationType = new GraphQLObjectType({
 				const book = books.find(book => book.id === args.bookId)
 				book.authorId = args.authorId
 				return book
+			}
+		},
+		deleteBook: {
+			type: GraphQLNonNull(GraphQLString),
+			args: {
+				bookId: { type: GraphQLNonNull(GraphQLString) }
+			},
+			resolve: (parent, { bookId }) => {
+				return deleteBook(bookId)
+				.then(deletedBookId => {
+					updateBooks()
+					return deletedBookId
+				})
+			} 
+		},
+		deleteAuthor: {
+			type: GraphQLNonNull(GraphQLString),
+			args: {
+				authorId: { type: GraphQLNonNull(GraphQLString)}
+			},
+			resolve: (parent, { authorId }) => {
+				return deleteAuthor(authorId)
+				.then(authorId => {
+					updateAuthors()
+					return authorId
+				})
 			}
 		}
 	})
